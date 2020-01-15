@@ -24,7 +24,6 @@
 //　1：地雷が埋まっている場所 0：地雷がない場所で未チェック 2:　地雷がない場所でチェック済
 //　地雷は、その個数を指定し、setjirai()で最初にランダムに配置する
 int jirai[20][20]; // 地雷の場所は1　それ以外は0
-int jirairetu[400]; // ランダムに地雷を配置するためのワークエリア
 int visible[20][20]; // true: 内容を表示（チェック済） false : -を表示（未チェックを示す）
 int possible[20][20]; // true: 多分地雷だろうとしてチェック false : ノーコメント
 //  jiraiCount[y][x] : 配列の1次元目はｙ（縦）方向　配列の2次元目はｘ（横）方向とする
@@ -85,7 +84,7 @@ int main() {
     printf("input bomb count:");
     scanf("%d", &count);
     if (count > 400 | count < 1) count = 200;
-    setjirai(count, jirairetu, jirai);
+    setjirai(count, jirai);
     // marks[20][21]の初期化 
     for (int i=0;i<20;i++) {
         for (int j=0;j<20;j++) {

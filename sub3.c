@@ -1,16 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "game1.h"
 
+
+/*
+**　フィールドの行を描画する
+**　最初の3カラムは行番号　次の20カラムはフィールドの状態（marks）
+**
+*/
 int printrow(int rownumber, char *row) {
     printf("%2d %s\n", rownumber, row);
 }
 
+/*
+**　フィールドのヘッダー行を描画する
+**
+*/
 int printHeader(){
     printf("   00000000011111111112\n");
     printf("   12345678901234567890\n");
 }
 
+/*
+**　0-9のintを文字に変換する
+**　marksにセットする記号用で、汎用的にintを変換するものではない
+*/
 char sitoa(int i) {
     switch (i)
     {
@@ -29,16 +44,29 @@ char sitoa(int i) {
     return 'x';
 }
 
-void sellCountup(int x, int y, int jirai[][20], int jiraiCount[][20]) {
-    //printf("sellCountup %d %d\n",x,y);
-    for(int i = -1;i<2;i++) {
-        for(int j = -1;j<2;j++) {
-            if ( (x + i) < 0 | (x + i) > 19 | (y + j) < 0 | (y + j) > 19) {
-
-            } else {
-                if (jirai[y][x] == 1)  jiraiCount[y+j][x+i]++;
-            }
+/*
+**　jirai[20][20]に指定された数(count)の地雷を埋める
+*/
+int setjirai(int count, int jirai[][20]){
+    // 0から19までの乱数を発生
+    int cc = 0;
+    int jirairetu[400]; // ランダムに地雷を配置するためのワークエリア
+    //　同じ地雷数でも、地雷の位置が毎回変わるようにsrandに、今の時刻を渡す
+    srand(time(NULL));
+    //　0-399のランダムな数値を発生させる
+    while(1) {
+        int pos = rand() % 400;
+        //　すでに発生済の数値はカウントしない
+        if (jirairetu[pos] != 1) {
+            jirairetu[pos] = 1;
+            cc++;
         }
+        if (cc == count) break;
+    }
+    //　1次元配列を２次元配列：jiraiにする
+    for (int i=0;i<400;i++) {
+        int x = i % 20;
+        int y = i / 20;
+        if (jirairetu[i] == 1) jirai[y][x] = 1;
     }
 }
-
